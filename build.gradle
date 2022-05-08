@@ -1,0 +1,56 @@
+plugins {
+	id 'org.springframework.boot' version '2.5.9'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'com.approvalservice'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Spring Boot
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Project Lombok
+	compileOnly 'org.projectlombok:lombok:1.18.22'
+	annotationProcessor 'org.projectlombok:lombok:1.18.22'
+	testCompileOnly 'org.projectlombok:lombok:1.18.22'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+	// rest assured
+	testImplementation 'io.rest-assured:rest-assured:4.5.1'
+	testImplementation 'io.rest-assured:xml-path:4.5.1'
+	// gson
+	testImplementation 'com.google.code.gson:gson:2.9.0'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+sourceSets {
+	integration {
+		java.srcDir file("src/integration/java")
+		resources.srcDir file("src/integration/resources")
+		runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.test.runtimeClasspath
+		compileClasspath += sourceSets.main.compileClasspath + sourceSets.test.compileClasspath
+	}
+}
+
+configurations {
+	integrationImplementation.extendsFrom testImplementation
+	integrationRuntime.extendsFrom testRuntime
+}
+
+task integrationTest(type: Test) {
+	testClassesDirs = sourceSets.integration.output.classesDirs
+	classpath = sourceSets.integration.runtimeClasspath
+
+	useJUnitPlatform()
+}

@@ -1,0 +1,13 @@
+[Unit]
+Description=Manage Java service for Loan Amount Approval Service
+
+[Service]
+WorkingDirectory=/opt/services/ApprovalService
+ExecStart=/bin/java -Xms128m -Xmx128m -jar approvalservice-0.0.1-SNAPSHOT.jar
+User=tomcat
+Type=simple
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

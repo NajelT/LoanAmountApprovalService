@@ -1,0 +1,12 @@
+version: '2'
+services:
+  approvalservice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    volumes:
+      - '.:/usr/src/app'
+    working_dir: /usr/src/app
